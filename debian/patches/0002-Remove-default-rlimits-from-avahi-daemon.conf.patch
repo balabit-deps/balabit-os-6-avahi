@@ -1,0 +1,37 @@
+Description: Remove default [rlimits] from avahi-daemon.conf
+ A number of issues with the default restrictive ulimits have recently
+ arisen.  Particularly the default data limit is being hit in some cases
+ and the process limit is being hit when multiple containers are in use
+ without UID mapping.
+
+ We remove all default rlimits and leave it up to the distribution to
+ impose some limit with systemd if they really desire to do so, but are
+ not recommended at this stage.
+
+ I also increase the example memory limits to double in case someone
+ wants to use them, as the existing limits are sometimes insufficient
+ (Closes: #113)
+
+Author: Trent Lloyd <trent@lloyd.id.au>
+Origin: upstream, https://github.com/lathiat/avahi/commit/71ace71504a97e8a15d202dc673939c7a92ea5e9
+Bug: https://github.com/lathiat/avahi/issues/113
+Bug-Ubuntu: https://bugs.launchpad.net/bugs/1661869
+Index: avahi-0.6.32~rc+dfsg/avahi-daemon/avahi-daemon.conf
+===================================================================
+--- avahi-0.6.32~rc+dfsg.orig/avahi-daemon/avahi-daemon.conf
++++ avahi-0.6.32~rc+dfsg/avahi-daemon/avahi-daemon.conf
+@@ -60,9 +60,9 @@ publish-workstation=no
+ 
+ [rlimits]
+ #rlimit-as=
+-rlimit-core=0
+-rlimit-data=4194304
+-rlimit-fsize=0
+-rlimit-nofile=768
+-rlimit-stack=4194304
++#rlimit-core=0
++#rlimit-data=8388608
++#rlimit-fsize=0
++#rlimit-nofile=768
++#rlimit-stack=8388608
+ #rlimit-nproc=3

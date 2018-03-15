@@ -1,3 +1,13 @@
+avahi (0.6.32~rc+dfsg-1ubuntu2.1) xenial; urgency=medium
+
+  * d/p/0001-Remove-default-rlimit-nproc-3.patch,
+  * d/p/0002-Remove-default-rlimits-from-avahi-daemon.conf.patch:
+    - Remove all overly restrictive default rlimit restrictions in
+    avahi-daemon.conf which can cause avahi to fail to start due to
+    too many running process or crash out of memory. (LP: #1661869)
+
+ -- Trent Lloyd <trent.lloyd@canonical.com>  Thu, 15 Mar 2018 10:16:57 +0800
+
 avahi (0.6.32~rc+dfsg-1ubuntu2) xenial; urgency=medium
 
   * Put back libavahi-common3-udeb and libavahi-core7-udeb, they are being

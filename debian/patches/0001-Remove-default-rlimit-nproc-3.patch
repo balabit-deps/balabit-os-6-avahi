@@ -1,0 +1,62 @@
+Description: Remove default rlimit-nproc=3
+ By default, avahi-daemon.conf configures rlimit-nproc=3 to limit the
+ number of processes running to 3.  In some cases, this would prevent
+ avahi from starting within a container.
+
+ It is presumed this was an attempt to limit attack vectors or Denial of
+ Service potential of an exploited bug in Avahi.
+
+ A problem arises (avahi fails to launch) when the same UID is re-used on
+ the system, such as containers without UID remapping also running avahi.
+ In particular, setting security.privileged=true on LXD containers causes
+ this behavior and avahi will fail to launch in containers because the
+ total number of processes under the avahi UID on the system exceeds 3.
+
+ We comment out the default rlimit-nproc=3 setting from avahi-daemon.conf
+ and update the relevant manpage with this information. (Closes: #97)
+
+ References:
+ https://lists.linuxcontainers.org/pipermail/lxc-users/2016-January/010791.html
+ https://github.com/lxc/lxc/issues/25
+
+Author: Trent Lloyd <trent@lloyd.id.au>
+Origin: upstream, https://github.com/lathiat/avahi/commit/537371c786479f44882ece3d905a0e5ccda4f0a2
+Bug: https://github.com/lathiat/avahi/issues/97
+Bug-Ubuntu: https://bugs.launchpad.net/bugs/1661869
+Index: avahi-0.6.32~rc+dfsg/avahi-daemon/avahi-daemon.conf
+===================================================================
+--- avahi-0.6.32~rc+dfsg.orig/avahi-daemon/avahi-daemon.conf
++++ avahi-0.6.32~rc+dfsg/avahi-daemon/avahi-daemon.conf
+@@ -65,4 +65,4 @@ rlimit-data=4194304
+ rlimit-fsize=0
+ rlimit-nofile=768
+ rlimit-stack=4194304
+-rlimit-nproc=3
++#rlimit-nproc=3
+Index: avahi-0.6.32~rc+dfsg/man/avahi-daemon.conf.5.xml.in
+===================================================================
+--- avahi-0.6.32~rc+dfsg.orig/man/avahi-daemon.conf.5.xml.in
++++ avahi-0.6.32~rc+dfsg/man/avahi-daemon.conf.5.xml.in
+@@ -360,10 +360,18 @@
+       <p><opt>rlimit-stack=</opt> Value in bytes for RLIMIT_STACK (maximum size of the process stack). Sensible values are heavily system dependent.</p>
+     </option>
+ 
+-    <option>
+-      <p><opt>rlimit-nproc=</opt> Value for RLIMIT_NPROC (number of process of user). avahi-daemon forks of a helper process on systems where <manref name="chroot" section="2"/> is available. Therefore this value should not be set below 2.</p>
+-    </option>
+-
++		<option>
++			<p><opt>rlimit-nproc=</opt> Value for RLIMIT_NPROC (max number of
++				processes a user can launch). avahi-daemon forks of a helper process on
++				systems where <manref name="chroot" section="2"/> is available
++				therefore this value should not be set below 2. Note that while the
++				process limit only applies to this process, the total count of
++				processes to reach that limit includes all processes on the system with
++				the same UID, including any containers without UID remapping (such as
++				lxd containers with security.privileged=true).  The default
++				configuration of 3 was removed to prevent problems in this
++				scenario.</p>
++		</option>
+   </section>
+ 
+   <section name="Authors">
