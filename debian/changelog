@@ -1,3 +1,10 @@
+avahi (0.6.32~rc+dfsg-1ubuntu2.2) xenial; urgency=medium
+
+  * debian/patches/no-systemd-also.patch: Don't use 'Also=' in dnsconfd
+    systemd unit. (LP: #1760128)
+
+ -- Brian Murray <brian@ubuntu.com>  Tue, 17 Apr 2018 09:57:56 -0700
+
 avahi (0.6.32~rc+dfsg-1ubuntu2.1) xenial; urgency=medium
 
   * d/p/0001-Remove-default-rlimit-nproc-3.patch,
