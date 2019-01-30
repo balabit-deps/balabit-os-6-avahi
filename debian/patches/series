@@ -1,3 +1,4 @@
 0001-Remove-default-rlimit-nproc-3.patch
 0002-Remove-default-rlimits-from-avahi-daemon.conf.patch
 no-systemd-also.patch
+CVE-2017-6519-and-CVE-2018-1000845.patch

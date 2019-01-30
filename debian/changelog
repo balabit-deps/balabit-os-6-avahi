@@ -1,3 +1,13 @@
+avahi (0.6.32~rc+dfsg-1ubuntu2.3) xenial-security; urgency=medium
+
+  * SECURITY UPDATE: Denial of service
+    - debian/patches/CVE-2017-6519-and-CVE-2018-1000845.patch:
+      fix in avahi-core/server.c.
+    - CVE-2017-6519
+    - CVE-2018-1000845
+
+ -- Leonidas S. Barbosa <leo.barbosa@canonical.com>  Wed, 30 Jan 2019 12:31:17 -0300
+
 avahi (0.6.32~rc+dfsg-1ubuntu2.2) xenial; urgency=medium
 
   * debian/patches/no-systemd-also.patch: Don't use 'Also=' in dnsconfd
